@@ -4,10 +4,10 @@
   </a>
   +
   <a href="https://bigdaymovies.pl">
-    <img alt="BigDayMovies" src="https://bigdaymovies.pl/icons/icon-72x72.png" width="60" />
+    <img alt="BigDayMovies" src="https://bigdaymovies.pl/images/icon-72x72.png" width="60" />
   </a>
   =
-  <img alt="Love icon" src="https://bigdaymovies.pl/icons/icon-love.svg" width="60" />
+  <img alt="Love icon" src="https://bigdaymovies.pl/images/icon-love.svg" width="60" />
 </p>
 <h1 align="center">
   BigDayMovies.pl - website based on GatsbyJS
