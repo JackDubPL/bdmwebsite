@@ -53,12 +53,12 @@ export default (props) => {
 
             <PageContainer display="flex">
                 <StyledHeader className="page-header">
-                    <Box display="flex" justifyContent="center">
-                        <Link to="/">
+                    <Box display="flex" justifyContent="center" alignItems="center">
+                        <LogoLink to="/">
                             <Logo src="/bdm-logo.png" alt={data.site.siteMetadata.shortTitle + " - logo"}/>
-                        </Link>
+                        </LogoLink>
+                        <Navigation pageWrapperSelector="#page-wrap"/>
                     </Box>
-                    <Navigation pageWrapperSelector="#page-wrap"/>
                 </StyledHeader>
                 <StyledMain className="page-content">
                     {props.children}
@@ -73,6 +73,9 @@ export default (props) => {
 }
 
 const PageContainer = styled(Box)`
+    position: relative;
+    margin: 15px;
+
     &::before {
         content: '';
         z-index: -1;
@@ -92,6 +95,9 @@ const StyledMain = styled.main`
 
 const Logo = styled.img`
     width: 200px;
+`
+const LogoLink = styled(Link)`
+    margin: 0 auto;
 `
 
 const StyledHeader = styled.header`

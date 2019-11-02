@@ -67,13 +67,13 @@ const pageContent = {
 const IntroSection = styled(Box)`
     position: relative;
     width: 100%;
-    height: 95vh;
+    height: calc(100vh - 30px);
     color: #fff;
     text-align: center;
 `
 
 const SloganContainer = styled(Box)`
-    padding-top: 130px;
+    padding-top: 100px;
     height: 100%;
 
     
@@ -83,7 +83,7 @@ const SloganContainer = styled(Box)`
     }
     
     .slogan {
-        font: bold 3rem/120% 'Open Sans', sans-serif;
+        font: 600 2.8rem/120% 'Open Sans', sans-serif;
         text-transform: uppercase;
         letter-spacing: 5px;
         margin: 0;

@@ -119,7 +119,7 @@ const Hamburger = styled.button`
     span {
         display: block;
         position: relative;
-        background: #fff;
+        background: ${props => props.isMenuOpen ? 'none' : '#fff'};
         width: 24px;
         height: 2px;
         border: none;
@@ -137,19 +137,23 @@ const Hamburger = styled.button`
         }
 
         &::before {
-            top: 6px;
+            top: ${props => props.isMenuOpen ? '0' : '6px'};
+            transform: rotate(${props => props.isMenuOpen ? '45deg' : '0'});
         }
         &::after {
-            bottom:6px;
+            bottom: ${props => props.isMenuOpen ? '0' : '6px'};
+            transform: rotate(${props => props.isMenuOpen ? '-45deg' : '0'});
         }
         
     }
 
     &:hover span::before {
-        top: 8px;
+        top: ${props => props.isMenuOpen ? '0' : '8px'};
+        transform: rotate(${props => props.isMenuOpen ? '-45deg' : '0'});
     }
     &:hover span::after {
-        bottom: 8px;
+        bottom: ${props => props.isMenuOpen ? '0' : '8px'};
+        transform: rotate(${props => props.isMenuOpen ? '45deg' : '0'});
     }
 `
 
@@ -180,6 +184,11 @@ class Navigation extends Component {
             <div>
                 <Global 
                     styles={css`
+                        html, body {
+                            max-width: 100%;
+                            overflow-x: hidden;
+                        }
+
                         ${this.props.pageWrapperSelector} {
                             max-width: 100%;
                             transform: translateX(${this.state.isMenuOpen ? '-70%' : '0'});
@@ -188,7 +197,7 @@ class Navigation extends Component {
                     `}
                 />
 
-                <Hamburger onClick={this.handleMenuToggle}>
+                <Hamburger onClick={this.handleMenuToggle} isMenuOpen={this.state.isMenuOpen}>
                     <span></span>
                 </Hamburger>
                 <StyledMenuWrapper isMenuOpen={this.state.isMenuOpen}>
