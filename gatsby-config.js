@@ -14,14 +14,6 @@ module.exports = {
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-material-ui`,
     {
-      resolve: `gatsby-source-graphql`,
-      options: {
-        typeName: "GCMS",
-        fieldName: "gcms",
-        url: 'https://api-euwest.graphcms.com/v1/ck27mzrd923oc01ffcg3u0pqj/master'
-      }
-    },
-    {
       resolve: `gatsby-plugin-manifest`,
       options: {
         name: `BigDayMovies - zachowaj tę chwilę na zawsze...!`,
@@ -35,13 +27,47 @@ module.exports = {
       },
     },
     {
-      resolve: `gatsby-plugin-google-fonts`,
+      resolve: `gatsby-plugin-prefetch-google-fonts`,
       options: {
         fonts: [
-          `Open Sans\:200,300,600,800`,
-          `Sacramento\:400`
+          {
+            'family': 'Open Sans',
+            'variants': [
+              '200',
+              '300',
+              '600',
+              '800'
+            ],
+            'subsets': [
+              'latin-ext'
+            ]
+          },
+          {
+            'family': 'Sacramento',
+            'variants': [
+              '400'
+            ],
+            'subsets': [
+              'latin-ext'
+            ]
+          }
         ],
       },
     },
+    {
+      resolve: 'gatsby-plugin-react-svg',
+      options: {
+        rule: {
+          include: /\.inline\.svg$/
+        }
+      }
+    },
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: `assets`,
+        path: `${__dirname}/src/assets/`,
+      }
+    }
   ],
 }

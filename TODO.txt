@@ -1,0 +1,7 @@
+1) Smooth Scroll
+3) Preloader
+4) Titles and text animations 
+6) Lazy load for assets (videos!)
++ 7) Logo format change to SVG
+8) Add SVG inline loader
+9) Update Homepage sections on window.resize

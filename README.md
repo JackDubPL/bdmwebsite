@@ -27,3 +27,11 @@ The pretty simple and good-looking portfolio website project. It based on 'blazi
     cd bdm-www-gatsby/
     gatsby develop
     ```
+
+2. **Z-index levels**
+
+    There are some z-index levels in project:
+    
+    1. -100 - Videobackground box
+    2. 10 - Page header
+    3. 1000 - Preloader

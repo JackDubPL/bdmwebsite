@@ -1,13 +1,19 @@
-import React from "react"
-import styled from "@emotion/styled"
+import React from 'react'
+import styled from '@emotion/styled'
 
-export default props => (
-    <StyledVideoContainer overlayColor={props.overlayColor}>
-        <StyledVideo poster={props.poster} autoPlay muted loop>
-            <source src={props.url} type="video/mp4"/>
-        </StyledVideo>
-    </StyledVideoContainer>
-)
+export default props => {
+
+    return (
+        <StyledVideoContainer overlayColor={props.overlayColor}>
+            <StyledVideo poster={props.poster} autoPlay muted loop>
+                <source src={props.url} type='video/mp4'/>
+            </StyledVideo>
+        </StyledVideoContainer>
+    )
+}
+
+
+// Styles
 
 const StyledVideoContainer = styled.div`
     position: absolute;
@@ -28,7 +34,7 @@ const StyledVideoContainer = styled.div`
         top: 0;
         width: 100%;
         height: 100%;
-        background-color: ${props => props.overlayColor};
+        background-color: ${props => props.overlayColor ? props.overlayColor : ''};
     }
     `
     
