@@ -10,6 +10,7 @@ import Box from "@material-ui/core/Box"
 import Layout from "../components/layout"
 import VideoBg from "../components/videobg"
 import Slider from "../components/slider"
+import SectionSlider from "../components/sectionScroll"
 
 
 export default ({ data }) => {
@@ -29,27 +30,33 @@ export default ({ data }) => {
             </Helmet>
 
             <Layout>
-                <HeroSection display="flex" alignItems="center" flexDirection="column">
-                    <VideoBg poster={pageContent.videoBg.poster} url={data.allFile.edges.filter(file => file.node.name === 'bdm-bg')[0].node.publicURL} overlayColor={pageContent.videoBg.overlay} />
-                    <SloganContainer display="flex" justifyContent="center" flexDirection="column">
-                        <p className="slogan__top">{pageContent.hero.sloganTop}</p>
-                        <p className="slogan">{pageContent.hero.slogan}</p>
-                        <StyledLink to={pageContent.hero.btn.url}><i>{pageContent.hero.btn.icon}</i> {pageContent.hero.btn.text}</StyledLink>
-                    </SloganContainer>
-                </HeroSection>
-                <StorySection>
-                    <Slider slides={leadSlides} />
-                    <SliderOverlay display='flex' flexDirection='column' justifyContent='space-between'>
-                        <Box display='flex' justifyContent='center'>
-                            <span className='slider-overlay-icon__rec'>REC</span>
-                            <span className='slider-overlay-text__top'>{pageContent.leadSliderOverlay.top}</span>
-                        </Box>
-                        <Box display='flex' justifyContent='space-between'>
-                            <span className='slider-overlay-text__left'>{pageContent.leadSliderOverlay.bttmLeft[Math.floor(Math.random() * (3 - 1)) + 1]}</span>
-                            <span className='slider-overlay-text__right'>{pageContent.leadSliderOverlay.bttmRight[Math.floor(Math.random() * (3 - 1)) + 1]}</span>
-                        </Box>
-                    </SliderOverlay>
-                </StorySection>
+                <SectionSlider>
+                    <HeroSection className="section" display="flex" alignItems="center" flexDirection="column">
+                        <VideoBg poster={pageContent.videoBg.poster} url={data.allFile.edges.filter(file => file.node.name === pageContent.videoBg.filename)[0].node.publicURL} overlayColor={pageContent.videoBg.overlay} />
+                        <SloganContainer display="flex" justifyContent="center" flexDirection="column">
+                            <p className="slogan__top">{pageContent.hero.sloganTop}</p>
+                            <p className="slogan">{pageContent.hero.slogan}</p>
+                            <StyledLink to={pageContent.hero.btn.url}><i>{pageContent.hero.btn.icon}</i> {pageContent.hero.btn.text}</StyledLink>
+                        </SloganContainer>
+                    </HeroSection>
+                    <LeadSection className="section" display='flex' alignItems='center' flexDirection='column'>
+                        <h2 className='lead-title'>Co filmujemy?</h2>
+                        <p className='lead-hashtags'>#wesela #studniówki #reklamy #spoty #wydarzenia #imprezy</p>
+                    </LeadSection>
+                    <StorySection className="section">
+                        <Slider slides={leadSlides} />
+                        <SliderOverlay display='flex' flexDirection='column' justifyContent='space-between'>
+                            <Box display='flex' justifyContent='center'>
+                                <span className='slider-overlay-icon__rec'>REC</span>
+                                <span className='slider-overlay-text__top'>{pageContent.leadSliderOverlay.top}</span>
+                            </Box>
+                            <Box display='flex' justifyContent='space-between'>
+                                <span className='slider-overlay-text__left'>{pageContent.leadSliderOverlay.bttmLeft[Math.floor(Math.random() * (3 - 1)) + 1]}</span>
+                                <span className='slider-overlay-text__right'>{pageContent.leadSliderOverlay.bttmRight[Math.floor(Math.random() * (3 - 1)) + 1]}</span>
+                            </Box>
+                        </SliderOverlay>
+                    </StorySection>
+                </SectionSlider>
             </Layout>
         </>
     )
@@ -80,6 +87,7 @@ const pageContent = {
     },
     
     videoBg: {
+        filename: 'bdm-bg',
         poster: '/bdm-bg-poster.jpg',
         overlay: 'rgba(0,0,0,.67)',
     },
@@ -187,7 +195,13 @@ const SliderOverlay = styled(Box)`
     }
 `
 
-
+const LeadSection = styled(Box)`
+    position: relative;
+    padding: 50px 15px;
+    min-height: 300px;
+    height: 30vh;
+    text-align: center;
+`
 
 const StorySection = styled(Box)`
     position: relative;

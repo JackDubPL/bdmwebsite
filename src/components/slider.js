@@ -55,7 +55,8 @@ const SlideWrapper = styled.div`
 
 const SliderWrapper = styled.div`
     display: flex;
-    height: 100%
+    flex-wrap: wrap;
+    height: 100%;
 `
 
 
