@@ -1,244 +1,147 @@
-import React from "react"
-import { Helmet } from "react-helmet"
-import styled from "@emotion/styled"
-import { keyframes } from "@emotion/core"
+import React from 'react'
+import styled from '@emotion/styled'
+import { Helmet } from 'react-helmet'
+import { StaticQuery } from 'gatsby'
+import AniLink from 'gatsby-plugin-transition-link/AniLink'
+import { gsap} from 'gsap/dist/gsap'
+import ScrollMagic from 'scrollmagic'
+import { ScrollMagicPluginGsap } from 'scrollmagic-plugin-gsap'
+import 'imports-loader?define=>false!scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators'
 
-import { Link } from "gatsby"
+import VideoBackground from '../components/VideoBackground'
 
-import Box from "@material-ui/core/Box"
+// Import SVG assets
+import SvgIconFacebook from '../assets/images/icon-sm-facebook.svg'
+import SvgIconYoutube from '../assets/images/icon-sm-youtube.svg'
+import SvgIconInstagram from '../assets/images/icon-sm-instagram.svg'
 
-import Layout from "../components/layout"
-import VideoBg from "../components/videobg"
-import Slider from "../components/slider"
-import SectionSlider from "../components/sectionScroll"
+export default class Index extends React.Component {
 
+    componentDidMount() {
+        /************* */
+        /** ANIMATIONS */
+        /************* */
 
-export default ({ data }) => {
+        // This is necessary to use GSAP v3 with ScrollMagic
+        ScrollMagicPluginGsap(ScrollMagic, gsap);
 
-    // Set video URL if filename is setted
-    const leadSlides = pageContent.leadSlider.map(slide => {
-        if (!slide.url && slide.filename) {
-            slide.url = data.allFile.edges.filter(file => file.node.name === slide.filename)[0].node.publicURL;
-        }
-        return slide;
-    });
-    
-    return (
-        <>
-            <Helmet>
-                <title>{data.site.siteMetadata.shortTitle}{pageContent.seo.pageTitleSeparator ? pageContent.seo.pageTitleSeparator : ''}{pageContent.seo.pageTitle ? pageContent.seo.pageTitle : ''}</title>
-            </Helmet>
+        // Create ScrollMagic controller
+        const controller = new ScrollMagic.Controller({
+            refreshInterval: 0,
+        });
 
-            <Layout>
-                <SectionSlider>
-                    <HeroSection className="section" display="flex" alignItems="center" flexDirection="column">
-                        <VideoBg poster={pageContent.videoBg.poster} url={data.allFile.edges.filter(file => file.node.name === pageContent.videoBg.filename)[0].node.publicURL} overlayColor={pageContent.videoBg.overlay} />
-                        <SloganContainer display="flex" justifyContent="center" flexDirection="column">
-                            <p className="slogan__top">{pageContent.hero.sloganTop}</p>
-                            <p className="slogan">{pageContent.hero.slogan}</p>
-                            <StyledLink to={pageContent.hero.btn.url}><i>{pageContent.hero.btn.icon}</i> {pageContent.hero.btn.text}</StyledLink>
-                        </SloganContainer>
-                    </HeroSection>
-                    <LeadSection className="section" display='flex' alignItems='center' flexDirection='column'>
-                        <h2 className='lead-title'>Co filmujemy?</h2>
-                        <p className='lead-hashtags'>#wesela #studniówki #reklamy #spoty #wydarzenia #imprezy</p>
-                    </LeadSection>
-                    <StorySection className="section">
-                        <Slider slides={leadSlides} />
-                        <SliderOverlay display='flex' flexDirection='column' justifyContent='space-between'>
-                            <Box display='flex' justifyContent='center'>
-                                <span className='slider-overlay-icon__rec'>REC</span>
-                                <span className='slider-overlay-text__top'>{pageContent.leadSliderOverlay.top}</span>
-                            </Box>
-                            <Box display='flex' justifyContent='space-between'>
-                                <span className='slider-overlay-text__left'>{pageContent.leadSliderOverlay.bttmLeft[Math.floor(Math.random() * (3 - 1)) + 1]}</span>
-                                <span className='slider-overlay-text__right'>{pageContent.leadSliderOverlay.bttmRight[Math.floor(Math.random() * (3 - 1)) + 1]}</span>
-                            </Box>
-                        </SliderOverlay>
-                    </StorySection>
-                </SectionSlider>
-            </Layout>
-        </>
-    )
-}
+        // Hero parallax & other animations
+        const tl = gsap.timeline({repeat: 2, repeatDelay: 1});
+              tl.to( '#hero-section .hero-background video', {y: '30%', duration: 10, ease: 'none'});
+              tl.to( '#hero-section .hero-slogan', {y: '-100', opacity: 0, offset: '33%', duration: 5, ease: 'slow'}, '0' );
 
-export const data = graphql`
-    query {
-        site {
-            siteMetadata {
-                shortTitle
-            }
-        },
-        allFile {
-            edges {
-                node {
-                    publicURL
-                    name
-                }
-            }
-        }
+        new ScrollMagic.Scene({
+            duration: '100%',
+            triggerHook: 0
+        })
+        .setTween(tl)
+        .addIndicators()
+        .addTo(controller);
+
+        // In-out animations
+        gsap.from( '#hero-section .hero-slogan', {y: '-100', duration: 2.5} );
     }
-`
 
-const pageContent = {
-    seo: {
-        pageTitle: 'filmownaie eventów, relacje wideo, filmy ślubne, reportaże | Piła Szczecin',
-        pageTitleSeparator: ' - ',
-    },
-    
-    videoBg: {
-        filename: 'bdm-bg',
-        poster: '/bdm-bg-poster.jpg',
-        overlay: 'rgba(0,0,0,.67)',
-    },
+    render() {
+        return (
+            <StaticQuery
+                query = {graphql`
+                    query {
+                        site {
+                            siteMetadata {
+                                shortTitle
+                            }
+                        }
+                        videoBackground: file(name: {eq: "bdm-bg"}) {
+                            publicURL
+                        }
+                        videoBackgroundPoster: file(name: {eq: "bdm-bg-poster"}) {
+                            childImageSharp {
+                                fluid(maxWidth: 1200, webpQuality: 65) {
+                                    src
+                                    srcWebp
+                                }
+                            }
+                        }
+                    }
+                `}
 
-    hero: {
-        sloganTop: 'Zachowaj tę chwilę',
-        slogan: 'na zawsze!',
-        btn: {
-            visible: true,
-            text: 'Nasze historie',
-            url: '#',
-            icon: '',
-        }
-    },
-
-    leadSlider: [
-        {
-            slogan: 'W życiu zdarzają się',
-            sloganSecond: 'momenty',
-            filename: 'bdm-slider-1',
-            poster: '/bdm-slider-1-poster.jpg'
-        },
-        {
-            slogan: 'Do których chcielibyśmy',
-            sloganSecond: 'powrócić',
-            filename: 'bdm-slider-2',
-            poster: 'bdm-slider-2-poster.jpg',
-            // url: '../assets/bdm-bg.mp4'
-        }
-    ],
-
-    leadSliderOverlay: {
-        top: '1080p   |   50fps',
-        bttmLeft: [
-            '1/100',
-            '1/200',
-            '1/50'
-        ],
-        bttmRight: [
-            'f 1.4',
-            'f 1.8',
-            'f 2.0'
-        ],
-        color: '#fff3'
+                render={(data) => (
+                    <>
+                        <Helmet>
+                            <title>{data.site.siteMetadata.shortTitle} - filmowanie wesel, eventów, relacje wideo, filmy ślubne, reportaże | Piła Szczecin</title>
+                        </Helmet>
+        
+                        <HeroSection id="hero-section" className="section" ref={this.heroSection}>
+                            <VideoBackground className="hero-background" parallax poster={data.videoBackgroundPoster.childImageSharp.fluid.srcWebp} url={data.videoBackground.publicURL} overlayColor="rgba(0,0,0,.67)" />
+                            <HeroSlogan className="hero-slogan">
+                                <p className="hero-slogan__top">Zachowaj te chwile</p>
+                                <p className="hero-slogan">na zawsze!</p>
+                                <StyledLink swipe to="/oferta/">Nasze historie</StyledLink>
+                            </HeroSlogan>
+                        </HeroSection>
+                        
+                        <SocialMediaSection id="sm-section" className="section">
+                            <ul className="sm-icon-container">
+                                <li><a href="https://www.facebook.com/bigdaymoviespl/" title="Odwiedź nas na Facebook..." target="_blank" rel="noopener noreferrer" className="sm-icon"><SvgIconFacebook /></a></li>
+                                <li><a href="https://www.youtube.com/channel/UCNjQdDdq5OPss5M7uVPlo3Q" title="Odwiedź nas na YouTube..." target="_blank" rel="noopener noreferrer" className="sm-icon"><SvgIconYoutube /></a></li>
+                                <li><a href="https://www.instagram.com/" title="Odwiedź nas na Instagram..." target="_blank" rel="noopener noreferrer" className="sm-icon"><SvgIconInstagram /></a></li>
+                            </ul>
+                        </SocialMediaSection>
+                    </>
+                )} 
+            />
+        )
     }
 }
-
-
-
-// Emotion Keyframes
-
-const recIconFlashing = keyframes`
-    from, to {
-        background: #f005;
-    }
-
-    85% {
-        background: #0005;
-    }
-`
-
-
 
 // Styles
-
-const SliderOverlay = styled(Box)`
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-
-    .slider-overlay-text__top,
-    .slider-overlay-text__left,
-    .slider-overlay-text__right {
-        text-align: center;
-        font-size: .88rem;
-        font-weight: 600;
-        font-style: italic;
-        color: #888;
-        margin: .8rem;
-    }
-
-    .slider-overlay-text__top {
-        margin-left: auto;
-        margin-right: auto;   
-    }
-    
-    .slider-overlay-icon__rec {
-        color: #f005;
-        font-weight: 800;
-        font-size: .6rem;
-        margin: 10px;
-
-        &:before {
-            content: '';
-            display: block;
-            background: #f005;
-            border-radius: 50%;
-            margin: 0 auto 3px;
-            width: .5rem;
-            height: .5rem;
-            animation: ${recIconFlashing} 4s ease infinite;
-        }
-    }
-`
-
-const LeadSection = styled(Box)`
+const HeroSection = styled.section`
+    display: flex;
     position: relative;
-    padding: 50px 15px;
-    min-height: 300px;
-    height: 30vh;
-    text-align: center;
-`
-
-const StorySection = styled(Box)`
-    position: relative;
-    width: 100%;
-    height: calc(100vh - 30px);
-    min-height: 300px;
-    margin-top: 15px;
-`
-
-const HeroSection = styled(Box)`
-    position: relative;
-    width: 100%;
-    height: calc(100vh - 30px);
-    min-height: 350px;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    min-height: 400px;
     color: #fff;
-    text-align: center;
+    text-align: center;    
 `
 
-const SloganContainer = styled(Box)`
+const HeroSlogan = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
     padding-top: 100px;
-    height: 100%;
+    height: 100%;    
 
-    
-    .slogan__top {
+    .hero-slogan__top {
         font: normal 2.2rem/150% 'Sacramento', sans-serif;
         margin: 0;
+
+        @media (min-width: 992px) {
+            font-size: 2.4rem;
+        }
     }
-    
-    .slogan {
+
+    .hero-slogan {
         font: 600 2.8rem/120% 'Open Sans', sans-serif;
         text-transform: uppercase;
         letter-spacing: 5px;
         margin: 0;
+
+        @media (min-width: 992px) {
+            font-size: 3.2rem;
+        }
     }
 `
 
-const StyledLink = styled(Link)`
+const StyledLink = styled(AniLink)`
     position: relative;
     margin: 6vh auto 0;
     color: #fff;
@@ -252,6 +155,11 @@ const StyledLink = styled(Link)`
     overflow: hidden;
     box-shadow: 0px 6px 9px rgba(0,0,0,.15);
     transition: .5s;
+
+    @media (min-width: 992px) {
+        padding: 12px 24px;
+        font-size: 1.1em;
+    }
 
     &:hover {
         box-shadow: 0px 6px 18px rgba(0,0,0,.3)
@@ -272,5 +180,70 @@ const StyledLink = styled(Link)`
     &:hover::after {
         width: 100%;
         transition: .5s;
+    }
+`
+
+const SocialMediaSection = styled.section`
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 50px;
+    background: #fff;
+    overflow: hidden;
+
+    .sm-background-text {
+        position: absolute;
+        left: 20px;
+        top: 0;
+        font-size: 8em;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 5px;
+        margin: 0;
+        color: #ddd;
+        cursor: default;
+        z-index: 1;
+    }
+
+    .sm-icon-container {
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+        margin: 0;
+        padding: 0;
+        z-index: 2;
+
+        li {
+            list-style-type: none;
+            margin: 10px;
+        }
+    }
+
+    
+    .sm-icon {
+        display: flex;
+        color: #ccc;
+        justify-content: center;
+        align-items: center;
+        width: 4rem;
+        height: 4rem;
+        padding: 1rem;
+        border: 2px solid #ddd;
+        border-radius: 50%;
+        transition: .5s;
+
+        &:hover {
+            border-color: #922fb6;
+
+            svg {
+                fill: #922fb6;
+            }
+        }
+
+        svg {
+            fill: #aaa;
+            transition: .5s;
+        }
     }
 `

@@ -4,6 +4,8 @@
  * See: https://www.gatsbyjs.org/docs/gatsby-config/
  */
 
+const path = require(`path`)
+
 module.exports = {
   siteMetadata: {
     title: `BigDayMovies - zachowaj tę chwilę na zawsze...!`,
@@ -12,7 +14,14 @@ module.exports = {
   plugins: [
     `gatsby-plugin-emotion`,
     `gatsby-plugin-react-helmet`,
-    `gatsby-plugin-material-ui`,
+    `gatsby-plugin-sharp`,
+    `gatsby-transformer-sharp`,
+    {
+      resolve: `gatsby-plugin-transition-link`,
+      options: {
+        layout: path.join(__dirname, `src`, `components`, `Layout`)
+      }
+    },
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
@@ -23,9 +32,10 @@ module.exports = {
         lang: 'pl',
         theme_color: `#fff`,
         display: `standalone`,
-        icon: `src/images/icon.png`
+        icon: `static/icon.png`
       },
     },
+    `gatsby-plugin-offline`,
     {
       resolve: `gatsby-plugin-prefetch-google-fonts`,
       options: {
@@ -58,16 +68,30 @@ module.exports = {
       resolve: 'gatsby-plugin-react-svg',
       options: {
         rule: {
-          include: /\.inline\.svg$/
+          include: path.join(__dirname, `src`, `assets`, `images`),
         }
       }
     },
     {
       resolve: 'gatsby-source-filesystem',
       options: {
-        name: `assets`,
-        path: `${__dirname}/src/assets/`,
+        name: `pages`,
+        path: path.join(__dirname, `src`, `pages`),
       }
-    }
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `images`,
+        path: path.join(__dirname, `src`, `assets`, `images`),
+      },
+    },
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: `videos`,
+        path: path.join(__dirname, `src`, `assets`, `videos`),
+      }
+    },
   ],
 }

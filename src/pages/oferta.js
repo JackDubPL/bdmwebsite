@@ -1,8 +1,10 @@
 import React from "react"
-import Layout from "../components/layout"
 
 export default () => (
-    <Layout addtionalClassName="offer">
-        
-    </Layout>
+    <>
+        <div>
+            <h1>Offer</h1>
+            <p>Some content</p>    
+        </div>        
+    </>
 )

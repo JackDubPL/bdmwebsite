@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 
 export default (props) => (
-    <HamburgerBttn onClick={props.onClick} isMenuOpen={props.isMenuOpen}>
+    <HamburgerBttn aria-label="Menu główne..." onClick={props.onClick} isMenuOpen={props.isMenuOpen}>
         <span></span>
     </HamburgerBttn>
 );
